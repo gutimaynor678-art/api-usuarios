@@ -12,7 +12,7 @@ const app = express();
 
 // TODO 1: confiar en el PRIMER proxy (Render/Railway se ubican delante de la app).
 // Sin esto, todas las peticiones parecerían venir de una sola IP.
-app.set('trust proxy', 1);
+app.set('trust proxy', 2);
 
 // TODO 2: cabeceras de seguridad (también quita X-Powered-By)
 app.use(helmet());
@@ -47,7 +47,7 @@ app.use(express.json({ limit: '10kb' }));
 // Salud ANTES del limitador: el monitor de la plataforma la consulta con frecuencia
 app.get('/api/salud', async (req, res) => {
   const { rows } = await pool.query('SELECT now() AS hora');
-  res.json({ estado: 'ok', entorno: config.entorno, hora: rows[0].hora });
+    res.json({ version: '1.0.1', estado: 'ok', entorno: config.entorno, hora: rows[0].hora });
 });
 
 // TODO 5: limitador general para todo lo que cuelgue de /api
